@@ -201,7 +201,7 @@ if __name__ == "__main__":
 
       return test_loss,batch_predictions
 
-    first_epoch = 0
+    first_epoch = 0s
     num_epochs = 500
 
     train_loss_learning_curve = []
