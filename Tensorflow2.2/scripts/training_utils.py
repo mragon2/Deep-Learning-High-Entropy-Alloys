@@ -1065,7 +1065,7 @@ def plot_learning_curves(train_loss,
 
     plt.tight_layout()
 
-    fig.savefig(os.path.join(path, '/learning_curves.png'), bbox_inches='tight')
+    fig.savefig(os.path.join(path, 'learning_curves.png'), bbox_inches='tight')
 
     plt.close(fig)
 
