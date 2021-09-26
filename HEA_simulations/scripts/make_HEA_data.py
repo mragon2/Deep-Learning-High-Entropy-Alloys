@@ -33,8 +33,8 @@ if __name__ == '__main__':
 
     chemical_symbols = ['Pt', 'Ni', 'Pd', 'Co', 'Fe']
 
-    low_f = 15  # lower bound of element composition
-    high_f = 40  # upper bound of element composition
+    low_f = 5  # lower bound of element composition
+    high_f = 80  # upper bound of element composition
 
     assert low_f <= 100 / len(chemical_symbols), 'The minimal fraction of a single chemical element in a {} element HEA can not be higher than {:.0f}%, received {}% '.format(len(chemical_symbols),
                                                                                                                                                                                 100 / len(chemical_symbols),
@@ -77,9 +77,9 @@ if __name__ == '__main__':
 
         random_Cs = np.random.uniform(180, 220, size=1)[0]  # 1st order aberration
 
-        random_asti_mag = np.random.uniform(18, 22, size=1)[0]  # astigmation magnitude [A]
+        random_astig_mag = np.random.uniform(18, 22, size=1)[0]  # astigmation magnitude [A]
 
-        random_asti_angle = np.random.uniform(12, 16, size=1)[0]  # astigmation angle [A]
+        random_astig_angle = np.random.uniform(12, 16, size=1)[0]  # astigmation angle [A]
 
         HEA_stem = HEA_STEM(qstem,
                         random_HEA_model,
@@ -91,8 +91,8 @@ if __name__ == '__main__':
                         random_alpha,
                         random_defocus,
                         random_Cs,
-                        random_asti_mag,
-                        random_asti_angle,
+                        random_astig_mag,
+                        random_astig_angle,
                         add_noise,
                         noise_mean,
                         noise_std)
