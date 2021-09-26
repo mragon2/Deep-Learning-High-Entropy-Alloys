@@ -243,6 +243,10 @@ class Random_HEA(object):
             for i in range(len(self.model.get_positions()) - len(chemical_elements)):
 
                 chemical_elements.append('Pt')
+                
+        if len(self.model.get_positions()) < len(chemical_elements):
+            
+            chemical_elements = chemical_elements[:len(self.model.get_positions()]
 
         return chemical_elements
 
