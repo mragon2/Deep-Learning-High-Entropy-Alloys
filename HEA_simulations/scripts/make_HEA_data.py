@@ -33,9 +33,12 @@ if __name__ == '__main__':
 
     chemical_symbols = ['Pt', 'Ni', 'Pd', 'Co', 'Fe']
 
-    low_f = 5  # lower bound of element composition
+    low_f = 15  # lower bound of element composition
+    high_f = 40  # upper bound of element composition
 
-    high_f = 45  # upper bound of element composition
+    assert low_f <= 100 / len(chemical_symbols), 'The minimal fraction of a single chemical element in a {} element HEA can not be higher than {:.0f}%, received {}% '.format(len(chemical_symbols),
+                                                                                                                                                                                100 / len(chemical_symbols),
+                                                                                                                                                                                low_f)
 
     qstem = PyQSTEM('STEM')
 
@@ -66,17 +69,17 @@ if __name__ == '__main__':
 
         random_HEA_model = random_HEA.get_model()
 
-        random_v0 = np.random.randint(180, 220, size=1)[0]  # acceleration voltage [keV]
+        random_v0 = np.random.uniform(180, 220, size=1)[0]  # acceleration voltage [keV]
 
-        random_alpha = np.random.randint(15, 20, size=1)[0]  # convergence_angle [mrad]
+        random_alpha = np.random.uniform(15, 20, size=1)[0]  # convergence_angle [mrad]
 
-        random_defocus = np.random.randint(-10, 10, size=1)[0]  # defocus [A]
+        random_defocus = np.random.uniform(-10, 10, size=1)[0]  # defocus [A]
 
-        random_Cs = np.random.randint(180, 220, size=1)[0]  # 1st order aberration
+        random_Cs = np.random.uniform(180, 220, size=1)[0]  # 1st order aberration
 
-        random_asti_mag = np.random.randint(18, 22, size=1)[0]  # astigmation magnitude [A]
+        random_asti_mag = np.random.uniform(18, 22, size=1)[0]  # astigmation magnitude [A]
 
-        random_asti_angle = np.random.randint(12, 16, size=1)[0]  # astigmation angle [A]
+        random_asti_angle = np.random.uniform(12, 16, size=1)[0]  # astigmation angle [A]
 
         HEA_stem = HEA_STEM(qstem,
                         random_HEA_model,

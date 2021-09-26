@@ -41,10 +41,12 @@ spatial_domain = (51.2, 51.2)  # A
 
 chemical_symbols = ['Pt', 'Ni', 'Pd', 'Co', 'Fe']
 
-low_f = 30 # lower bound of element composition
+low_f = 15 # lower bound of element composition
+high_f = 40 # upper bound of element composition
 
-high_f = 33 # upper bound of element composition
-
+assert low_f <= 100 / len(chemical_symbols), 'The minimal fraction of a single chemical element in a {} element HEA can not be higher than {:.0f}%, received {}% '.format(len(chemical_symbols),
+                                                                                                                                                                            100/len(chemical_symbols),
+                                                                                                                                                                             low_f)
 qstem = PyQSTEM('STEM')
 
 image_size = (256, 256)  # px
@@ -60,6 +62,7 @@ add_noise = False # depending if we want to add noise in the simulated STEM imag
 noise_mean = 0.0 # noise distribution mean (noise added is add_noise = True)
 
 noise_std = 1.0  # noise distribution std (noise added is add_noise = True)
+
 
 
 def HEA_multiprocessing(data_index):
@@ -82,7 +85,7 @@ def HEA_multiprocessing(data_index):
     #print('% of Fe = {:.2f}'.format(len(np.where(np.array(cs) == 'Fe')[0])/len(cs)))
     #print('')
 
-    random_v0 = np.random.randint(180, 220, size=1)[0]  # acceleration voltage [keV]
+    random_v0 = np.random.uniform(180, 220, size=1)[0]  # acceleration voltage [keV]
 
     random_alpha = np.random.uniform(15, 20, size=1)[0]  # convergence_angle [mrad]
 
@@ -134,5 +137,9 @@ if __name__ == '__main__':
         first_number = num_data * counter + 1
 
         pool = mp.Pool(n_processors)
-        pool.map(HEA_multiprocessing, [data_index for data_index in range(first_number, num_data + first_number)])
+        pool.map(HEA_multiprocessing, [data_index for data_index in range(first_number,num_data + first_number)])
         pool.close()
+
+    pool = mp.Pool(n_processors)
+    pool.map(HEA_multiprocessing, [data_index for data_index in range(first_number,num_data + first_number)])
+    pool.close()
