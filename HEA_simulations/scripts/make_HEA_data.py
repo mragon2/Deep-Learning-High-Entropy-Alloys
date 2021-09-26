@@ -31,10 +31,12 @@ if __name__ == '__main__':
 
     spatial_domain = (51.2, 51.2)  # A
 
+    random_transl = False
+
     chemical_symbols = ['Pt', 'Ni', 'Pd', 'Co', 'Fe']
 
-    low_f = 5  # lower bound of element composition
-    high_f = 80  # upper bound of element composition
+    low_f = 15  # lower bound of element composition
+    high_f = 40  # upper bound of element composition
 
     assert low_f <= 100 / len(chemical_symbols), 'The minimal fraction of a single chemical element in a {} element HEA can not be higher than {:.0f}%, received {}% '.format(len(chemical_symbols),
                                                                                                                                                                                 100 / len(chemical_symbols),
@@ -65,7 +67,7 @@ if __name__ == '__main__':
 
         random_size = np.random.uniform(low_size,up_size, 1)[0]  # A
 
-        random_HEA = Random_HEA(crystal_structure, random_size, spatial_domain, chemical_symbols, low_f, high_f)
+        random_HEA = Random_HEA(crystal_structure, random_size, spatial_domain, random_transl, chemical_symbols, low_f, high_f)
 
         random_HEA_model = random_HEA.get_model()
 

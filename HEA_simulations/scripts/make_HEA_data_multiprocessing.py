@@ -39,6 +39,8 @@ up_size = 40
 
 spatial_domain = (51.2, 51.2)  # A
 
+random_transl = False
+
 chemical_symbols = ['Pt', 'Ni', 'Pd', 'Co', 'Fe']
 
 low_f = 15 # lower bound of element composition
@@ -71,7 +73,7 @@ def HEA_multiprocessing(data_index):
 
     random_size = np.random.uniform(low_size, up_size, 1)[0]  # A
 
-    random_HEA = Random_HEA(crystal_structure, random_size, spatial_domain, chemical_symbols, low_f, high_f)
+    random_HEA = Random_HEA(crystal_structure, random_size, spatial_domain, random_transl, chemical_symbols, low_f, high_f)
 
     random_HEA_model = random_HEA.get_model()
 
@@ -132,7 +134,7 @@ def HEA_multiprocessing(data_index):
 
 if __name__ == '__main__':
 
-    for counter in range(160):
+    for counter in range(1,160):
 
         first_number = num_data * counter + 1
 

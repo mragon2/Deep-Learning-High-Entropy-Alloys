@@ -164,17 +164,21 @@ class Random_Cluster(object):
 
 class Random_HEA(object):
     
-    def __init__(self,crystal_structure, random_size,spatial_domain,chemical_symbols,low_f,high_f):
+    def __init__(self,crystal_structure, random_size,spatial_domain,random_transl,chemical_symbols,low_f,high_f):
 
         self.model = Random_Cluster(crystal_structure,random_size).get_model()
 
         self.spatial_domain = spatial_domain
+
+        self.random_transl = random_transl
 
         self.chemical_sysmbols = chemical_symbols
 
         self.low_f = low_f
 
         self.high_f = high_f
+
+
 
     def get_random_fractions(self, n_elements):
 
@@ -243,10 +247,10 @@ class Random_HEA(object):
             for i in range(len(self.model.get_positions()) - len(chemical_elements)):
 
                 chemical_elements.append('Pt')
-                
+
         if len(self.model.get_positions()) < len(chemical_elements):
             
-            chemical_elements = chemical_elements[:len(self.model.get_positions()]
+            chemical_elements = chemical_elements[:len(self.model.get_positions())]
 
         return chemical_elements
 
@@ -275,12 +279,12 @@ class Random_HEA(object):
 
         self.model.center()
 
-        #tx = random.randint(-self.spatial_domain[0] * 1 / 8, self.spatial_domain[0] * 1 / 8)
+        if self.random_transl:
 
-        #ty = random.randint(-self.spatial_domain[1] * 1 / 8, self.spatial_domain[1] * 1 / 8)
-     
+            tx = np.random.uniform(-self.spatial_domain[0] * 1 / 8, self.spatial_domain[0] * 1 / 8, size = 1)
+            ty = random.uniform(-self.spatial_domain[1] * 1 / 8, self.spatial_domain[1] * 1 / 8, size = 1)
 
-        #self.model.translate((tx, ty, 0))
+            self.model.translate((tx, ty, 0))
 
         return self.model
 
