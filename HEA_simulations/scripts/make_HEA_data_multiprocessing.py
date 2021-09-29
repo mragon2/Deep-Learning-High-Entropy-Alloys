@@ -22,15 +22,14 @@ print("Number of available processors: ", n_processors)
 print("Number of used processors: ", num_data)
 
 
-#chemical_symbols = ['Pt', 'Ni', 'Pd', 'Co', 'Fe']
-chemical_symbols = ['O', 'Mn', 'Fe']
+chemical_symbols = ['Pt', 'Ni', 'Pd', 'Co', 'Fe']
 
 # training
-path = 'OMnFe_data/training_data/'
+path = 'PtNiPdCoFe_data/training_data/'
 num_data_all = 8000
 
 # test
-#path = 'OMnFe_data/training_data/'
+#path = 'PtNiPdCoFe_data/training_data/'
 #num_data_all = 2000
 
 
@@ -43,8 +42,7 @@ spatial_domain = (51.2, 51.2)  # A
 
 random_transl = False
 
-#chemical_symbols = ['Pt', 'Ni', 'Pd', 'Co', 'Fe']
-chemical_symbols = ['O', 'Mn', 'Fe']
+chemical_symbols = ['Pt', 'Ni', 'Pd', 'Co', 'Fe']
 
 low_comp = 15  # lower bound of element composition
 high_comp = 40  # upper bound of element composition
@@ -76,12 +74,14 @@ def HEA_multiprocessing(data_index):
 
     random_size = np.random.uniform(low_size, up_size)  # A
 
-    comp_1 = np.random.uniform(60, 65)  # fraction element 1
-    comp_2 = np.random.uniform(10, 20)  # fraction element 2
-    comp_3 = 100 - comp_1 - comp_2  # fraction element 3
+    comp_1 = np.random.uniform(5, 20)  # composition element 1
+    comp_2 = np.random.uniform(5, 20)  # composition element 2
+    comp_3 = np.random.uniform(5, 20)  # composition element 1
+    comp_4 = np.random.uniform(5, 20)  # composition element 2
+    comp_5 = 100 - comp_1 - comp_2 - comp_3 - comp_4 # composition element 3
+    comp = [comp_1,comp_2,comp_3,comp_4,comp_5]
 
-    # comp = None
-    comp = [comp_1, comp_2, comp_3]
+    #comp = None
 
     assert len(chemical_symbols) == len(comp), '{} fractions are required for {} chemical symbols'.format(len(chemical_symbols),
                                                                                                         len(chemical_symbols))
