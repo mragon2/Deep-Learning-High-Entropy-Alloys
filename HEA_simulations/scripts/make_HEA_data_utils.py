@@ -164,7 +164,15 @@ class Random_Cluster(object):
 
 class Random_HEA(object):
     
-    def __init__(self,crystal_structure, random_size,spatial_domain,random_transl,chemical_symbols,low_f,high_f):
+    def __init__(self,crystal_structure,
+                 random_size,
+                 spatial_domain,
+                 random_transl,
+                 chemical_symbols,
+                 f,
+                 low_f,
+                 high_f):
+
 
         self.model = Random_Cluster(crystal_structure,random_size).get_model()
 
@@ -173,6 +181,8 @@ class Random_HEA(object):
         self.random_transl = random_transl
 
         self.chemical_sysmbols = chemical_symbols
+
+        self.f = f
 
         self.low_f = low_f
 
@@ -207,8 +217,6 @@ class Random_HEA(object):
 
             fractions.append(f)
 
-        fractions = np.array(fractions)
-
         return fractions
 
     def get_element_list(self, element, fraction):
@@ -225,8 +233,13 @@ class Random_HEA(object):
 
     def get_chemical_elements(self):
 
+        if self.f  is  None:
 
-        fractions = 0.01 * self.get_random_fractions(len(self.chemical_sysmbols))
+            fractions = 0.01 * np.array(self.get_random_fractions(len(self.chemical_sysmbols)))
+
+        else:
+
+            fractions = 0.01 * np.array(self.f)
 
         chemical_elements = []
 
@@ -246,7 +259,8 @@ class Random_HEA(object):
 
             for i in range(len(self.model.get_positions()) - len(chemical_elements)):
 
-                chemical_elements.append('Pt')
+                chemical_elements.append(self.chemical_sysmbols[random.randint(0,len(self.chemical_sysmbols) - 1)])
+
 
         if len(self.model.get_positions()) < len(chemical_elements):
             
