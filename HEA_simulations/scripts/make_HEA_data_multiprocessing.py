@@ -97,9 +97,8 @@ def HEA_multiprocessing(data_index):
 
     random_HEA_model = random_HEA.get_model()
 
-    cs = random_HEA_model.get_chemical_symbols()
-
-    #print('Concentration of nanoparticle [{}/{}]'.format(data_index, num_data_all))
+    #cs = random_HEA_model.get_chemical_symbols()
+    #print('Concentration of HEA [{}/{}]'.format(data_index, num_data_all))
     #print('% of Pt = {:.2f}'.format(len(np.where(np.array(cs) == 'Pt')[0])/len(cs)))
     #print('% of Ni = {:.2f}'.format(len(np.where(np.array(cs) == 'Ni')[0])/len(cs)))
     #print('% of Pd = {:.2f}'.format(len(np.where(np.array(cs) == 'Pd')[0])/len(cs)))
