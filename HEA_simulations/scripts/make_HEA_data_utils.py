@@ -169,9 +169,9 @@ class Random_HEA(object):
                  spatial_domain,
                  random_transl,
                  chemical_symbols,
-                 f,
-                 low_f,
-                 high_f):
+                 comp,
+                 low_comp,
+                 high_comp):
 
 
         self.model = Random_Cluster(crystal_structure,random_size).get_model()
@@ -182,48 +182,46 @@ class Random_HEA(object):
 
         self.chemical_sysmbols = chemical_symbols
 
-        self.f = f
+        self.comp = comp
 
-        self.low_f = low_f
+        self.low_comp = low_comp
 
-        self.high_f = high_f
+        self.high_comp = high_comp
 
 
+    def get_random_composition(self, n_elements):
 
-    def get_random_fractions(self, n_elements):
-
-        fractions = []
+        comp = []
 
         for i in range(n_elements - 1, -1, -1):
 
-            a = 100 - i * 10 - sum(fractions)
+            c = 100 - i * 10 - sum(comp)
 
-            if (a > self.low_f and a < self.high_f):
+            if (c > self.low_comp and c < self.high_comp):
 
-                high = a
+                high_comp = c
 
             else:
 
-                high = self.high_f
+                high_comp = self.high_comp
 
             if i > 0:
 
-               # f = np.random.randint(low = self.low_f, high = high, size=1)[0]
-                f = random.randint(a = self.low_f, b = high)
+                cc = random.randint(a = self.low_comp, b = high_comp)
 
             else:
 
-                f = 100 - sum(fractions)
+                cc = 100 - sum(comp)
 
-            fractions.append(f)
+            comp.append(cc)
 
-        return fractions
+        return comp
 
-    def get_element_list(self, element, fraction):
+    def get_element_list(self, element, comp):
 
         element_list = []
 
-        n = int(fraction * len(self.model.get_chemical_symbols()))
+        n = int(comp * len(self.model.get_chemical_symbols()))
 
         for i in range(n):
 
@@ -233,13 +231,13 @@ class Random_HEA(object):
 
     def get_chemical_elements(self):
 
-        if self.f  is  None:
+        if self.comp  is  None:
 
-            fractions = 0.01 * np.array(self.get_random_fractions(len(self.chemical_sysmbols)))
+            comp = 0.01 * np.array(self.get_random_composition(len(self.chemical_sysmbols)))
 
         else:
 
-            fractions = 0.01 * np.array(self.f)
+            comp = 0.01 * np.array(self.comp)
 
         chemical_elements = []
 
@@ -247,9 +245,9 @@ class Random_HEA(object):
 
             element = self.chemical_sysmbols[i]
 
-            fraction = fractions[i]
+            c = comp[i]
 
-            element_list = self.get_element_list(element, fraction)
+            element_list = self.get_element_list(element, c)
 
             chemical_elements = chemical_elements + element_list
 
@@ -522,8 +520,8 @@ class HEA_Data(object):
 
         #cs = np.unique(self.model.get_chemical_symbols())[random.randint(0,
         #                                                          len(np.unique(self.model.get_chemical_symbols())) -1)]
-        
-        cs = 'Pt'
+
+        cs = 'O'
 
         fig = plt.figure(figsize=(14, 7))
         ax = fig.add_subplot(1, 2, 1)

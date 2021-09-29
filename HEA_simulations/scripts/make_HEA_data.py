@@ -15,14 +15,17 @@ import platform
 
 if __name__ == '__main__':
 
-    #path = 'data/training_data/'
-    #first_number = 1
-    #num_data_all = 8000
+    # training
+    path = 'OMnFe_data/training_data/'
+    first_number = 1
+    num_data_all = 8000
 
     # test
-    path = 'data/test_data/'
+    # path = 'OMnFe_data/training_data/'
     first_number = 1
-    num_data_all = 2000
+    # num_data_all = 2000
+
+    first_number
 
     crystal_structure = 'fcc'
 
@@ -33,12 +36,13 @@ if __name__ == '__main__':
 
     random_transl = False
 
-    chemical_symbols = ['Pt', 'Ni', 'Pd', 'Co', 'Fe']
-    
-    low_f = 15  # lower bound of element composition
-    high_f = 40  # upper bound of element composition
+    #chemical_symbols = ['Pt', 'Ni', 'Pd', 'Co', 'Fe']
+    chemical_symbols = ['O', 'Mn', 'Fe']
 
-    assert low_f <= 100 / len(chemical_symbols), 'The minimal fraction of a single chemical element in a {} element HEA can not be higher than {:.0f}%, received {}% '.format(len(chemical_symbols),
+    low_comp = 15  # lower bound of element composition
+    high_comp = 40  # upper bound of element composition
+
+    assert low_comp <= 100 / len(chemical_symbols), 'The minimal fraction of a single chemical element in a {} element HEA can not be higher than {:.0f}%, received {}% '.format(len(chemical_symbols),
                                                                                                                                                                                 100 / len(chemical_symbols),
                                                                                                                                                                                 low_f)
 
@@ -64,18 +68,16 @@ if __name__ == '__main__':
 
         print('Processing HEA [{}/{}]'.format(data_index, num_data_all))
 
-        random_size = np.random.uniform(low_size,up_size, 1)[0]  # A
+        random_size = np.random.uniform(low_size,up_size)  # A
 
-        f1 = np.random.uniform(5, 20, size=1)[0] # fraction element 1
-        f2 = np.random.uniform(5, 20, size=1)[0]  # fraction element 2
-        f3 = np.random.uniform(5, 20, size=1)[0]  # fraction element 3
-        f4 = np.random.uniform(5, 20, size=1)[0]  # fraction element 4
-        f5 = 100 - f1 - f2 - f3 - f4 # fraction element 5
+        comp_1 = np.random.uniform(60, 65)  # fraction element 1
+        comp_2 = np.random.uniform(10, 20)  # fraction element 2
+        comp_3 = 100 - comp_1 - comp_2  # fraction element 3
 
-        # f = None
-        f = [f1, f2, f3, f4, f5]
+        #comp = None
+        comp = [comp_1,comp_2,comp_3]
 
-        assert len(chemical_symbols) == len(f), '{} fractions are required for {} chemical symbols'.format(len(chemical_symbols),
+        assert len(chemical_symbols) == len(comp), '{} fractions are required for {} chemical symbols'.format(len(chemical_symbols),
                                                                                                                   len(chemical_symbols))
 
         random_HEA = Random_HEA(crystal_structure,
@@ -83,23 +85,23 @@ if __name__ == '__main__':
                                 spatial_domain,
                                 random_transl,
                                 chemical_symbols,
-                                f,
-                                low_f,
-                                high_f)
+                                comp,
+                                low_comp,
+                                high_comp)
 
         random_HEA_model = random_HEA.get_model()
 
-        random_v0 = np.random.uniform(180, 220, size=1)[0]  # acceleration voltage [keV]
+        random_v0 = np.random.uniform(180, 220)  # acceleration voltage [keV]
 
-        random_alpha = np.random.uniform(15, 20, size=1)[0]  # convergence_angle [mrad]
+        random_alpha = np.random.uniform(15, 20)  # convergence_angle [mrad]
 
-        random_defocus = np.random.uniform(-10, 10, size=1)[0]  # defocus [A]
+        random_defocus = np.random.uniform(-10, 10)  # defocus [A]
 
         random_Cs = np.random.uniform(180, 220, size=1)[0]  # 1st order aberration
 
-        random_astig_mag = np.random.uniform(18, 22, size=1)[0]  # astigmation magnitude [A]
+        random_astig_mag = np.random.uniform(18, 22)  # astigmation magnitude [A]
 
-        random_astig_angle = np.random.uniform(12, 16, size=1)[0]  # astigmation angle [A]
+        random_astig_angle = np.random.uniform(12, 16) # astigmation angle [A]
 
         HEA_stem = HEA_STEM(qstem,
                         random_HEA_model,
