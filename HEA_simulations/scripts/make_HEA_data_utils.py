@@ -520,6 +520,9 @@ class HEA_Data(object):
 
     def save_HEA_plot(self):
 
+        cs = np.unique(self.model.get_chemical_symbols())[random.randint(0,
+                                                                  len(np.unique(self.model.get_chemical_symbols())) -1)]
+
         fig = plt.figure(figsize=(14, 7))
         ax = fig.add_subplot(1, 2, 1)
 
@@ -531,7 +534,7 @@ class HEA_Data(object):
 
         ax = fig.add_subplot(1, 2, 2)
         im = ax.imshow(self.lbl[0, :, :, 0], cmap='jet')
-        plt.title('Pt labels',fontsize = 20)
+        plt.title('{} labels'.format(cs),fontsize = 20)
         divider = make_axes_locatable(ax)
         cax2 = divider.append_axes("right", size="5%", pad=0.05)
         cbar = plt.colorbar(im, cax=cax2)
