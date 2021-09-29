@@ -76,9 +76,9 @@ def HEA_multiprocessing(data_index):
 
     comp_1 = np.random.uniform(5, 20)  # composition element 1
     comp_2 = np.random.uniform(5, 20)  # composition element 2
-    comp_3 = np.random.uniform(5, 20)  # composition element 1
-    comp_4 = np.random.uniform(5, 20)  # composition element 2
-    comp_5 = 100 - comp_1 - comp_2 - comp_3 - comp_4 # composition element 3
+    comp_3 = np.random.uniform(5, 20)  # composition element 3
+    comp_4 = np.random.uniform(5, 20)  # composition element 4
+    comp_5 = 100 - comp_1 - comp_2 - comp_3 - comp_4 # composition element 5
     comp = [comp_1,comp_2,comp_3,comp_4,comp_5]
 
     #comp = None
