@@ -520,8 +520,10 @@ class HEA_Data(object):
 
     def save_HEA_plot(self):
 
-        cs = np.unique(self.model.get_chemical_symbols())[random.randint(0,
-                                                                  len(np.unique(self.model.get_chemical_symbols())) -1)]
+        #cs = np.unique(self.model.get_chemical_symbols())[random.randint(0,
+        #                                                          len(np.unique(self.model.get_chemical_symbols())) -1)]
+        
+        cs = 'Pt'
 
         fig = plt.figure(figsize=(14, 7))
         ax = fig.add_subplot(1, 2, 1)
