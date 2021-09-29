@@ -41,8 +41,7 @@ spatial_domain = (51.2, 51.2)  # A
 
 random_transl = False
 
-#chemical_symbols = ['Pt', 'Ni', 'Pd', 'Co', 'Fe']
-chemical_symbols = ['Pt', 'Ni', 'Pd']
+chemical_symbols = ['Pt', 'Ni', 'Pd', 'Co', 'Fe']
 
 low_f = 15 # lower bound of element composition
 high_f = 40 # upper bound of element composition
@@ -74,12 +73,14 @@ def HEA_multiprocessing(data_index):
 
     random_size = np.random.uniform(low_size, up_size, 1)[0]  # A
 
-    f1 = np.random.uniform(30, 40, size=1)[0] # fraction element 1
+    f1 = np.random.uniform(5, 20, size=1)[0] # fraction element 1
     f2 = np.random.uniform(5, 20, size=1)[0]  # fraction element 2
-    f3 = 100 - f1 - f2 # fraction element 3
+    f3 = np.random.uniform(5, 20, size=1)[0]  # fraction element 3
+    f4 = np.random.uniform(5, 20, size=1)[0]  # fraction element 4
+    f5 = 100 - f1 - f2 - f3 - f4 # fraction element 5
 
     # f = None
-    f = [f1, f2, f3]
+    f = [f1, f2, f3, f4, f5]
 
     assert len(chemical_symbols) == len(f), '{} fractions are required for {} chemical symbols'.format(len(chemical_symbols),
                                                                                                         len(chemical_symbols))
