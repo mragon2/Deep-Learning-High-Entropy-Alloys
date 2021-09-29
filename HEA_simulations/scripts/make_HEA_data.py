@@ -33,9 +33,8 @@ if __name__ == '__main__':
 
     random_transl = False
 
-    #chemical_symbols = ['Pt', 'Ni', 'Pd', 'Co', 'Fe']
-    chemical_symbols = ['Pt', 'Ni', 'Pd']
-
+    chemical_symbols = ['Pt', 'Ni', 'Pd', 'Co', 'Fe']
+    
     low_f = 15  # lower bound of element composition
     high_f = 40  # upper bound of element composition
 
