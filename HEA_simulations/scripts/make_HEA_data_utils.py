@@ -4,6 +4,7 @@ import random
 
 from ase.build import bulk
 from ase import Atoms
+from ase.io import read
 from ase.io import write
 
 from skimage.filters import gaussian
@@ -16,6 +17,9 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 import os
 
+def make_folder(path):
+    if path and not os.path.exists(path):
+        os.makedirs(path)
 
 class Random_Cluster(object):
 
@@ -168,6 +172,9 @@ class Random_HEA(object):
                  random_size,
                  spatial_domain,
                  random_transl,
+                 t_xy,
+                 random_rot,
+                 a_y,
                  chemical_symbols,
                  comp,
                  low_comp,
@@ -179,6 +186,12 @@ class Random_HEA(object):
         self.spatial_domain = spatial_domain
 
         self.random_transl = random_transl
+        
+        self.t_xy = t_xy
+        
+        self.random_rot = random_rot
+        
+        self.a_y = a_y
 
         self.chemical_sysmbols = chemical_symbols
 
@@ -231,7 +244,7 @@ class Random_HEA(object):
 
     def get_chemical_elements(self):
 
-        if self.comp  is  None:
+        if self.comp == 'random':
 
             comp = 0.01 * np.array(self.get_random_composition(len(self.chemical_sysmbols)))
 
@@ -277,9 +290,14 @@ class Random_HEA(object):
 
         self.model.set_chemical_symbols(chemical_elements)
 
-        self.model.rotate(v = 'y', a = 45, center='COP')
+        a = random.choice(self.a_y)
 
-        self.model.rotate(v='z', a = random.random() * 360, center='COP')
+        if self.random_rot:
+
+            self.model.rotate(v='y', a=a, center='COP')
+
+        self.model.rotate(v='z', a=random.random() * 360, center='COP')
+
 
         self.model.center(vacuum=0)
 
@@ -293,17 +311,66 @@ class Random_HEA(object):
 
         if self.random_transl:
 
-            tx = np.random.uniform(-self.spatial_domain[0] * 1 / 8, self.spatial_domain[0] * 1 / 8, size = 1)
-            ty = random.uniform(-self.spatial_domain[1] * 1 / 8, self.spatial_domain[1] * 1 / 8, size = 1)
+            tx = np.random.uniform(-self.spatial_domain[0] * self.t_xy, self.spatial_domain[0] * self.t_xy)
+            ty = np.random.uniform(-self.spatial_domain[1] * self.t_xy, self.spatial_domain[1] * self.t_xy)
+
+            self.model.translate((tx, ty, 0))
+
+        return self.model
+
+class ATK_Random_HEA():
+
+    def __init__(self,path,spatial_domain,random_transl,t_xy,random_rot,a_y):
+
+        self.path = path
+
+        self.spatial_domain  = spatial_domain
+
+        self.random_transl = random_transl
+        
+        self.t_xy = t_xy
+
+        self.random_rot = random_rot
+        
+        self.a_y = a_y
+
+    def get_model(self):
+
+        self.model = read(self.path)
+        
+        a = random.choice(self.a_y)
+
+        if self.random_rot:
+
+            self.model.rotate(v='y', a=a, center='COP')
+
+        self.model.rotate(v = 'z', a = random.random() * 360, center='COP')
+
+        self.model.center(vacuum=0)
+
+        cell = self.model.get_cell()
+
+        size = np.diag(cell)
+
+        self.model.set_cell((self.spatial_domain[0],) * 3)
+
+        self.model.center()
+
+        if self.random_transl:
+
+            tx = np.random.uniform(-self.spatial_domain[0] * self.t_xy, self.spatial_domain[0] * self.t_xy)
+            ty = random.uniform(-self.spatial_domain[1] * self.t_xy, self.spatial_domain[1] * self.t_xy)
 
             self.model.translate((tx, ty, 0))
 
         return self.model
 
 
+
+
 class HEA_STEM(object):
 
-    def __init__(self,qstem,HEA_model,image_size, resolution, probe, slice_thickness, v0, alpha, defocus, Cs, astig_mag, astig_angle, add_noise,noise_mean, noise_std):
+    def __init__(self,qstem,HEA_model,image_size, resolution, probe, slice_thickness, v0, alpha, defocus, Cs, astig_mag, astig_angle,random_aberrations, add_noise,noise_mean, noise_std):
 
         self.qstem = qstem
 
@@ -328,6 +395,8 @@ class HEA_STEM(object):
         self.astig_mag = astig_mag
 
         self.astig_angle = astig_angle
+        
+        self.random_aberrations = random_aberrations
 
         self.add_noise = add_noise
 
@@ -348,7 +417,8 @@ class HEA_STEM(object):
                                Cs = self.Cs,
                                defocus = self.defocus,
                                astig_mag = self.astig_mag,
-                               astig_angle = self.astig_angle
+                               astig_angle = self.astig_angle,
+                               aberrations = self.random_aberrations
                                 )
 
         self.wave = self.qstem.get_wave()
@@ -362,7 +432,7 @@ class HEA_STEM(object):
 
         self.qstem.build_potential(num_slices = self.num_slices, scan_range = self.scan_range)
 
-        detector1_radii = (70, 200)
+        detector1_radii = (70,200)
 
         detector2_radii = (0, 70)
 
@@ -372,7 +442,7 @@ class HEA_STEM(object):
 
         self.qstem.run()
 
-        self.img = self.qstem.read_detector('detector2') * (-1)
+        self.img = self.qstem.read_detector('detector2') * (-1) 
 
         return self.img
 
@@ -414,29 +484,30 @@ class HEA_STEM(object):
 
         self.get_local_normalization()
 
-        if self.add_noise:
+        #if self.add_noise:
 
-            self.get_local_noise()
+          #  self.get_local_noise()
 
         return self.img
 
 class HEA_Labels(object):
 
-    def __init__(self,HEA_model,image_size,resolution):
+    def __init__(self,HEA_model,image_size,resolution,spot_size):
 
         self.HEA_model = HEA_model
 
         self.image_size = image_size
 
         self.resolution = resolution
+        
+        self.spot_size = spot_size
 
     def get_labels_single_element(self,element):
 
         positions = self.HEA_model.get_positions()[np.array(self.HEA_model.get_chemical_symbols()) == element][:,:2]/self.resolution
 
-        spotsize = 0.52
 
-        width = int(spotsize/self.resolution)
+        width = int(self.spot_size/self.resolution)
 
         x, y = np.mgrid[0:self.image_size[0], 0:self.image_size[1]]
 
@@ -493,8 +564,7 @@ class HEA_Data(object):
 
     def save_HEA_model(self):
 
-        if(self.path + 'models/') and not os.path.exists(self.path + 'models/'):
-            os.makedirs(self.path + 'models/')
+        make_folder(self.path + 'models/')
 
         if self.data_index < 50:
 
@@ -509,8 +579,7 @@ class HEA_Data(object):
 
         self.data = np.concatenate([self.img,self.lbl], axis = 3)
 
-        if (self.path + 'img_lbl/') and not os.path.exists(self.path + 'img_lbl/'):
-            os.makedirs(self.path + 'img_lbl/')
+        make_folder(self.path + 'img_lbl/')
 
         np.save(self.path + 'img_lbl/HEA_img_lbl_{}.npy'.format(self.data_index),self.data)
 
@@ -521,28 +590,28 @@ class HEA_Data(object):
         #cs = np.unique(self.model.get_chemical_symbols())[random.randint(0,
         #                                                          len(np.unique(self.model.get_chemical_symbols())) -1)]
 
-        cs = 'O'
+        chemical_symbols = list(np.unique(self.model.get_chemical_symbols()))
 
-        fig = plt.figure(figsize=(14, 7))
-        ax = fig.add_subplot(1, 2, 1)
+        fig = plt.figure(figsize=(14, 14))
 
-        im = ax.imshow(self.img[0, :, :, 0], cmap='gray')
+        ax = fig.add_subplot(3, 2, 1)
+        im = ax.imshow(self.img[0,:,:,0], cmap='gray')
         plt.title('STEM image', fontsize=20)
         divider = make_axes_locatable(ax)
         cax1 = divider.append_axes("right", size="5%", pad=0.05)
         cbar = plt.colorbar(im, cax=cax1)
 
-        ax = fig.add_subplot(1, 2, 2)
-        im = ax.imshow(self.lbl[0, :, :, 0], cmap='jet')
-        plt.title('{} labels'.format(cs),fontsize = 20)
-        divider = make_axes_locatable(ax)
-        cax2 = divider.append_axes("right", size="5%", pad=0.05)
-        cbar = plt.colorbar(im, cax=cax2)
+        for cs in range(1, len(chemical_symbols) + 1):
+            ax = fig.add_subplot(3, 2, cs + 1)
+            im = ax.imshow(self.lbl[0,:, :, cs - 1], cmap='jet')
+            plt.title('{} CHs'.format(chemical_symbols[cs - 1], fontsize=20))
+            divider = make_axes_locatable(ax)
+            cax1 = divider.append_axes("right", size="5%", pad=0.05)
+            cbar = plt.colorbar(im, cax=cax1)
 
         plt.tight_layout()
 
-        if (self.path + 'plots/') and not os.path.exists(self.path + 'plots/'):
-            os.makedirs(self.path + 'plots/')
+        make_folder(self.path + 'plots/')
 
         if self.data_index < 50:
 
@@ -557,6 +626,14 @@ class HEA_Data(object):
         self.save_HEA_data()
 
         self.save_HEA_plot()
+        
+        
+def get_peaks_pos(image):
+
+    peaks_pos = peak_local_max(image, min_distance = 1, threshold_abs = 1e-6)
+
+    return peaks_pos
+
 
 
 
