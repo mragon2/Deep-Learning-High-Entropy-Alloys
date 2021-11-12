@@ -300,7 +300,7 @@ def train(results_folder_path,
 
             train_loss = total_train_loss / processed_batches_train
 
-            r2_CHs = R2_CHs(train_batch_predictions, train_batch_labels)
+            r2_CHs = R2_CHs(train_batch_predictions, train_batch_labels,num_chemical_elements)
             r2_all_elements_train = r2_CHs.get_r2_all_elements_batch()
 
             total_average_r2_train += r2_all_elements_train[num_chemical_elements]
@@ -339,7 +339,7 @@ def train(results_folder_path,
 
             test_loss = total_test_loss / processed_batches_test
 
-            r2_CHs = R2_CHs(test_batch_predictions, test_batch_labels)
+            r2_CHs = R2_CHs(test_batch_predictions, test_batch_labels,num_chemical_elements)
             r2_all_elements_test = r2_CHs.get_r2_all_elements_batch()
 
             total_average_r2_test += r2_all_elements_test[num_chemical_elements]
@@ -443,7 +443,7 @@ def train_model_parallel(results_folder_path,
 
             train_loss = total_train_loss / processed_batches_train
 
-            r2_CHs = R2_CHs(train_batch_predictions, train_batch_labels)
+            r2_CHs = R2_CHs(train_batch_predictions, train_batch_labels,num_chemical_elements)
             r2_all_elements_train = r2_CHs.get_r2_all_elements_batch()
 
             total_average_r2_train += r2_all_elements_train[num_chemical_elements]
@@ -482,7 +482,7 @@ def train_model_parallel(results_folder_path,
 
             test_loss = total_test_loss / processed_batches_test
 
-            r2_CHs = R2_CHs(test_batch_predictions, test_batch_labels)
+            r2_CHs = R2_CHs(test_batch_predictions, test_batch_labels,num_chemical_elements)
             r2_all_elements_test = r2_CHs.get_r2_all_elements_batch()
 
             total_average_r2_test += r2_all_elements_test[num_chemical_elements]
@@ -601,7 +601,7 @@ class R2_CHs(object):
 
     """
 
-    def __init__(self,batch_predictions, batch_labels,num_chemical_elements = 5):
+    def __init__(self,batch_predictions, batch_labels,num_chemical_elements):
 
         self.batch_predictions = np.array(batch_predictions)
 
