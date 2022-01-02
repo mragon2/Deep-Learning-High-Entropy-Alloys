@@ -15,6 +15,6 @@ if __name__ == '__main__':
 
 	config = Config(args.json_path)
 
-	train_serial(config)
-	#train_model_parallel(config)
+	#train_serial(config)
+	train_model_parallel(config)
 	#train_data_parallel(config)
