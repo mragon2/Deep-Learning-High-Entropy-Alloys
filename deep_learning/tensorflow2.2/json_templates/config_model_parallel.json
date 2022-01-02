@@ -10,7 +10,7 @@
     "num_chemical_elements" : 5,
     "pre_trained_weights_path" : "results/pre_trained_model_weights/epoch-796.h5",
     "pre_trained_layers_at" : "up_sampling_1_out/convolution_2_batch_normalization",
-    "pretrained" : "False",
+    "pretrained" : "True",
     "freeze" : "False",
     "num_chemical_elements_pre_trained_model" : 5,
 
