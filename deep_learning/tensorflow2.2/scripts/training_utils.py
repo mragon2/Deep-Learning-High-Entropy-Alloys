@@ -120,12 +120,7 @@ def make_batch(batch):
         img = img.reshape(img.shape+(1,)).astype(np.float32)
 
         lbl = data[:,:,:,1:]
-        # remove oxygen, element at index 4 in the labels
-        lbl1 = lbl[:,:,:,:4]
-        lbl2 = lbl[:,:,:,5]
-        lbl2 = np.expand_dims(lbl2,axis = 3)
-        lbl = np.concatenate([lbl1,lbl2],axis = 3)
-
+        
         rnd_img = Random_Imaging(image = img,labels = lbl)
         img,lbl = rnd_img.get_transform()
 
@@ -627,9 +622,6 @@ def train_data_parallel(config):
 
         for train_batch_index, train_batch in enumerate(train_dataset):
 
-           # if train_batch_index == 3:
-           #     break
-
             train_images, train_labels = make_batch(train_batch)
 
             train_loss, train_predictions = distributed_train_step(strategy,
@@ -673,16 +665,8 @@ def train_data_parallel(config):
 
         processed_batches_test = 0
 
-        # for test_batch_index, test_batch in enumerate(test_dataset):
-        for test_batch_index, test_batch in enumerate(train_dataset):
-
-            #if  test_batch_index == 3:
-            #    break
-
-            if test_batch_index == 2000 // batch_size + 1:
-                break
-            
-             
+        for test_batch_index, test_batch in enumerate(test_dataset):
+                     
             test_images, test_labels = make_batch(test_batch)
 
             test_loss, test_predictions = distributed_test_step(strategy,[test_images, test_labels], model, loss_object)
