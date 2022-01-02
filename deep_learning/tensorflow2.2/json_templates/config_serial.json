@@ -1,0 +1,35 @@
+{
+  "data_kwargs": {
+    "data_folder_path" : "../../HEA_simulations/PtNiPdCoFe_data/",
+     "results_folder_path" : "results/results_serial/results_data-parallelization-1_GPU/"
+  },
+
+  "model_kwargs": {
+    "batch_size" : 8,
+    "input_shape" : 256,
+    "num_chemical_elements" : 5,
+    "pre_trained_weights_path" : "results/pre_trained_model_weights/epoch-796.h5",
+    "pre_trained_layers_at" : "up_sampling_1_out/convolution_2_batch_normalization",
+    "pretrained" : "True",
+    "freeze" : "False",
+    "num_chemical_elements_pre_trained_model" : 5,
+
+    "optimizer" : "adam",
+    "learning_rate" : 1e-2,
+    "loss" : "MSE",
+    "mixed_precision" : "True",
+    "n_gpus" : 1,
+    "horovod" : "False",
+
+    "first_epoch" : 0,
+    "num_epochs" : 500,
+    "save_every" : 1
+  },
+  "plot_kwargs": {
+  "color_elements" : {"Pt" : "gray",
+                      "Ni" : "green",
+                      "Pd" : "blue",
+                      "Co" : "pink",
+                      "Fe" : "red"}
+  }
+}
